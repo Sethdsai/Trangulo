@@ -78,7 +78,7 @@ class ShellManager {
     suspend fun executeCommand(cmd: String): String = withContext(Dispatchers.IO) {
         if (!_isRunning.value) return@withContext "[ERROR] Shell not running"
         try {
-            writer?.write("$cmd\n")
+            writer?.write(("$cmd\n").toByteArray())
             writer?.flush()
             "[CMD] $cmd"
         } catch (e: Exception) {
@@ -89,7 +89,7 @@ class ShellManager {
     suspend fun stopShell() = withContext(Dispatchers.IO) {
         isReading = false
         try {
-            writer?.write("exit\n")
+            writer?.write("exit\n".toByteArray())
             writer?.flush()
             Thread.sleep(200)
             process?.destroy()
